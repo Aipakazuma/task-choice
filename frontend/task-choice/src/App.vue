@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import "normalize.css";
+import "remixicon/fonts/remixicon.css";
 </script>
 
 <template>

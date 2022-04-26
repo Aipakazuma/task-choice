@@ -2,18 +2,86 @@
 import { ref } from "vue";
 import LeafNode from "@/components/LeafNode.vue";
 
-const items = ref<Array<string>>(["Java", "Perl", "PHP"]);
+type Item = {
+  name: string;
+  showSelectBox: boolean;
+  marker: Marker;
+};
+
+type Marker = {
+  className: string;
+  markerName: string;
+};
+const items = ref<Array<Item>>([
+  {
+    name: "Java",
+    showSelectBox: false,
+    marker: {
+      className: "",
+      markerName: "",
+    },
+  },
+  {
+    name: "Perl",
+    showSelectBox: false,
+    marker: {
+      className: "",
+      markerName: "",
+    },
+  },
+  {
+    name: "PHP",
+    showSelectBox: false,
+    marker: {
+      className: "",
+      markerName: "",
+    },
+  },
+]);
+
+const markers = ref<Array<Marker>>([
+  {
+    className: "ri-building-4-line",
+    markerName: "仕事で使う",
+  },
+  {
+    className: "ri-heart-line",
+    markerName: "学ぶもの",
+  },
+  {
+    className: "ri-pause-circle-fill",
+    markerName: "今はやらない",
+  },
+]);
 const submit = (e) => {
   if (e.target.value === "") {
     return;
   }
-  items.value.push(e.target.value);
+  items.value.push({
+    name: e.target.value,
+    showSelectBox: false,
+    marker: {
+      className: "",
+      markerName: "",
+    },
+  });
   e.target.value = "";
 };
+
 const deleteEvent = (targetIndex) => {
   items.value = items.value.filter((v, index) => {
     return index !== targetIndex;
   });
+};
+
+const changeMarker = (e, itemIndex) => {
+  items.value[itemIndex].marker.className = e.target.value;
+  items.value[itemIndex].showSelectBox = false;
+};
+
+const showSelectBox = (index) => {
+  items.value[index].showSelectBox = true;
+  console.log(items.value[index]);
 };
 </script>
 
@@ -22,8 +90,24 @@ const deleteEvent = (targetIndex) => {
     <input type="text" @keyup.enter="submit" placeholder="入力してください" />
     <ul>
       <li v-for="(item, index) in items" :key="item">
-        <leaf-node :name="item" />
+        <leaf-node
+          :name="item.name"
+          :className="item.marker.className"
+          @click="showSelectBox(index)"
+        />
         <button @click="deleteEvent(index)" class="delete-button">×</button>
+        <select
+          v-show="item.showSelectBox"
+          @change="changeMarker($event, index)"
+        >
+          <option
+            v-for="marker in markers"
+            :key="marker.className"
+            :value="marker.className"
+          >
+            {{ marker.markerName }}
+          </option>
+        </select>
       </li>
     </ul>
   </div>
@@ -54,6 +138,11 @@ li {
   margin: 10px 10px;
   overflow-wrap: break-word;
   position: relative;
+  cursor: pointer;
+}
+
+li:hover {
+  background: #eee;
 }
 
 .delete-button {
@@ -66,5 +155,6 @@ li {
   font-size: 10px;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 </style>
