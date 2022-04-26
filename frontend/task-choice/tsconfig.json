@@ -1,5 +1,8 @@
 {
   "files": [],
+  "include": [
+    "./src/@types/**/*.ts",
+  ],
   "references": [
     {
       "path": "./tsconfig.vite-config.json"
