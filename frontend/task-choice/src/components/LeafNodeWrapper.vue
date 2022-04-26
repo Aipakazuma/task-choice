@@ -1,19 +1,20 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import LeafNode from "@/components/LeafNode.vue";
+
+const items = ref<Array<string>>(["Java", "Perl", "PHP"]);
+const submit = (e) => {
+  items.value.push(e.target.value);
+  e.target.value = "";
+};
 </script>
 
 <template>
   <div>
-    <button>Add</button>
+    <input type="text" @keyup.enter="submit" />
     <ul>
-      <li>
-        <leaf-node name="Java" />
-      </li>
-      <li>
-        <leaf-node name="Perl" />
-      </li>
-      <li>
-        <leaf-node name="PHP" />
+      <li v-for="item in items" :key="item">
+        <leaf-node :name="item" />
       </li>
     </ul>
   </div>
