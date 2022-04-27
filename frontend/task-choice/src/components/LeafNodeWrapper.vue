@@ -12,47 +12,32 @@ type Marker = {
   className: string;
   markerName: string;
 };
+
+const initMarker = (className: string, markerName: string): Marker => {
+  return {
+    className,
+    markerName,
+  };
+};
+const initItem = (_name: string): Item => {
+  return {
+    name: _name,
+    showSelectBox: false,
+    marker: initMarker("", ""),
+  };
+};
 const items = ref<Array<Item>>([
-  {
-    name: "Java",
-    showSelectBox: false,
-    marker: {
-      className: "",
-      markerName: "",
-    },
-  },
-  {
-    name: "Perl",
-    showSelectBox: false,
-    marker: {
-      className: "",
-      markerName: "",
-    },
-  },
-  {
-    name: "PHP",
-    showSelectBox: false,
-    marker: {
-      className: "",
-      markerName: "",
-    },
-  },
+  initItem("Java"),
+  initItem("Perl"),
+  initItem("PHP"),
 ]);
 
 const markers = ref<Array<Marker>>([
-  {
-    className: "ri-building-4-line",
-    markerName: "仕事で使う",
-  },
-  {
-    className: "ri-heart-line",
-    markerName: "学ぶもの",
-  },
-  {
-    className: "ri-pause-circle-fill",
-    markerName: "今はやらない",
-  },
+  initMarker("ri-building-4-line", "仕事で使う"),
+  initMarker("ri-heart-line", "学ぶもの"),
+  initMarker("ri-pause-circle-fill", "今はやらない"),
 ]);
+
 const submit = (e) => {
   if (e.target.value === "") {
     return;
@@ -68,20 +53,20 @@ const submit = (e) => {
   e.target.value = "";
 };
 
-const deleteEvent = (targetIndex) => {
+const deleteEvent = (targetIndex: number): void => {
   items.value = items.value.filter((v, index) => {
     return index !== targetIndex;
   });
 };
 
-const changeMarker = (e, itemIndex) => {
-  items.value[itemIndex].marker.className = e.target.value;
+const changeMarker = (e: Event, itemIndex: number): void => {
+  const target = e.target as HTMLInputElement;
+  items.value[itemIndex].marker.className = target.value;
   items.value[itemIndex].showSelectBox = false;
 };
 
-const showSelectBox = (index) => {
+const showSelectBox = (index: number): void => {
   items.value[index].showSelectBox = true;
-  console.log(items.value[index]);
 };
 </script>
 
@@ -100,6 +85,7 @@ const showSelectBox = (index) => {
           v-show="item.showSelectBox"
           @change="changeMarker($event, index)"
         >
+          <option name="" disabled selected>選択してください</option>
           <option
             v-for="marker in markers"
             :key="marker.className"
@@ -118,9 +104,9 @@ input {
   padding: 10px 0;
   border: 1px solid;
   margin-top: 10px;
-  padding-left: 14px;
   border-radius: 5px;
-  margin-left: auto;
+  text-align: center;
+  width: 100%;
 }
 
 ul {
