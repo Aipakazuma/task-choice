@@ -104,9 +104,9 @@ input {
   padding: 10px 0;
   border: 1px solid;
   margin-top: 10px;
-  padding-left: 14px;
   border-radius: 5px;
-  margin-left: auto;
+  text-align: center;
+  width: 100%;
 }
 
 ul {
