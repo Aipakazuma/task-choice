@@ -85,6 +85,7 @@ const showSelectBox = (index: number): void => {
           v-show="item.showSelectBox"
           @change="changeMarker($event, index)"
         >
+          <option name="" disabled selected>選択してください</option>
           <option
             v-for="marker in markers"
             :key="marker.className"
