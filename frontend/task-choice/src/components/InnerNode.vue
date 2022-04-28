@@ -10,7 +10,7 @@ defineProps<{
 <template>
   <div class="inner-node">
     <span>{{ name }}</span>
-    <leaf-node-wrapper :items="items" />
+    <leaf-node-wrapper :name="name" :items="items" />
   </div>
 </template>
 

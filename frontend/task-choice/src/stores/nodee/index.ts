@@ -1,4 +1,5 @@
 import { reactive, readonly } from "vue";
+import UUID from "uuidjs";
 
 const mockNodes: Nodee[] = [
   {
@@ -25,13 +26,13 @@ const initializeMarker = (className: string, markerName: string): Marker => {
 const initializeItem = (name: string) => {
   const date = new Date();
   return {
-    id: date.getTime(),
+    id: UUID.generate(),
     name: name,
     showSelectBox: false,
     marker: initializeMarker("", ""),
     createdAt: date,
     updatedAt: date,
-  };
+  } as Item;
 };
 
 for (let i = 0; i < 3; i++) {
@@ -52,23 +53,42 @@ const getItems = (nodeName: string) => {
   return node.items;
 };
 
-const addItem = async (nodeName: string, itemName: Item) => {
-  const node = getItems(nodeName);
-  node.items.push(initializeItem(itemName));
+const getItemsIndex: number = (nodeName: NodeeName) => {
+  const index = state.nodes.findIndex((node) => node.name === nodeName);
+  if (index < 0) {
+    throw new Error(`cannot find node by nodeName:${nodeName}`);
+  }
+  return index;
 };
 
-const updateItem = (nodeName: string, id: number, item: Item) => {
-  const node = getItems(nodeName);
-  const index = node.items.find((item) => item.id === id);
-  if (index === -1) {
+const addItem = async (nodeName: string, itemName: Item) => {
+  const items = getItems(nodeName);
+  items.push(initializeItem(itemName));
+};
+
+const updateItem = (nodeName: string, id: number, markerClassName: string) => {
+  const items = getItems(nodeName);
+  const item = items.find((item) => item.id === id);
+  if (!item) {
     throw new Error(`cannot find item by id:${id}`);
   }
-  node.items[index] = item;
+  item.marker.className = markerClassName;
+  item.showSelectBox = false;
+};
+
+const showSelectBox = (nodeName: NodeeName, id: string): void => {
+  console.log(nodeName, id);
+  const items = getItems(nodeName);
+  const item = items.find((item) => item.id === id);
+  item.showSelectBox = true;
 };
 
 const deleteItem = (nodeName: string, id: number) => {
-  const node = getItems(nodeName);
-  node.items = node.items.filter((item) => item.id !== id);
+  const index = getItemsIndex(nodeName);
+  console.log(index, state.nodes[index].items);
+  state.nodes[index].items = state.nodes[index].items.filter(
+    (item) => item.id !== id
+  );
 };
 
 const nodeStore: NodeeStore = {
@@ -76,6 +96,7 @@ const nodeStore: NodeeStore = {
   getItems,
   addItem,
   updateItem,
+  showSelectBox,
   deleteItem,
 };
 

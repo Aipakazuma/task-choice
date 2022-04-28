@@ -11,6 +11,7 @@ export type Marker = {
 };
 
 export type Item = {
+  id: string;
   name: string;
   showSelectBox: boolean;
   marker: Marker;
@@ -31,6 +32,7 @@ export type NodeeStore = {
   state: DeepReadonly<NodeeState>;
   getItems: (nodeeName: NodeeName) => void;
   addItem: (nodeeName: NodeeName, itemName: Item) => void;
-  updateItem: (nodeeName: NodeeName, id: number, item: Item) => void;
-  deleteItem: (nodeeName: NodeeName, id: number) => void;
+  updateItem: (nodeeName: NodeeName, id: string, item: Item) => void;
+  showSelectBox(nodeeName: NodeName, id: string);
+  deleteItem: (nodeeName: NodeeName, id: string) => void;
 };

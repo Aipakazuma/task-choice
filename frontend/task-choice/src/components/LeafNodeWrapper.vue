@@ -1,40 +1,69 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, toRefs } from "vue";
 import LeafNode from "@/components/LeafNode.vue";
-import { Item } from "@/store/node/types";
+import { inject } from "vue";
+import { nodeKey } from "@/stores/nodee";
 
-defineProps<{
+const props = defineProps<{
+  name: NodeeName;
   items: Item[];
 }>();
 
-const submit = (e) => {
-  if (e.target.value === "") {
+const markers: Marker[] = [
+  {
+    className: "ri-building-4-line",
+    markerName: "仕事で使う",
+  },
+  {
+    className: "ri-heart-line",
+    markerName: "学ぶもの",
+  },
+  {
+    className: "ri-pause-circle-fill",
+    markerName: "今はやらない",
+  },
+];
+
+const nodeStore = inject(nodeKey);
+const { name } = toRefs(props);
+
+const submit = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.value === "") {
     return;
   }
-  e.target.value = "";
+  nodeStore.addItem(name.value, target.value);
+  target.value = "";
 };
 
-const deleteEvent = (targetIndex: number): void => {};
+const deleteEvent = (targetId: string): void => {
+  nodeStore.deleteItem(name.value, targetId);
+};
 
-const changeMarker = (e: Event, itemIndex: number): void => {};
+const changeMarker = (e: Event, targetId: string): void => {
+  const target = e.target as HTMLInputElement;
+  nodeStore.updateItem(name.value, targetId, target.value);
+};
 
-const showSelectBox = (index: number): void => {};
+const showSelectBox = (targetId: string): void => {
+  nodeStore.showSelectBox(name.value, targetId);
+};
 </script>
 
 <template>
   <div>
     <input type="text" @keyup.enter="submit" placeholder="入力してください" />
     <ul>
-      <li v-for="(item, index) in items" :key="item">
+      <li v-for="item in items" :key="item.id">
         <leaf-node
           :name="item.name"
           :className="item.marker.className"
-          @click="showSelectBox(index)"
+          @click="showSelectBox(item.id)"
         />
-        <button @click="deleteEvent(index)" class="delete-button">×</button>
+        <button @click="deleteEvent(item.id)" class="delete-button">×</button>
         <select
           v-show="item.showSelectBox"
-          @change="changeMarker($event, index)"
+          @change="changeMarker($event, item.id)"
         >
           <option name="" disabled selected>選択してください</option>
           <option

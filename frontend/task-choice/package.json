@@ -13,6 +13,7 @@
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.13",
     "remixicon": "^2.5.0",
+    "uuidjs": "^4.2.11",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14"
   },
