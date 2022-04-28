@@ -1,73 +1,24 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import LeafNode from "@/components/LeafNode.vue";
+import { Item } from "@/store/node/types";
 
-type Item = {
-  name: string;
-  showSelectBox: boolean;
-  marker: Marker;
-};
-
-type Marker = {
-  className: string;
-  markerName: string;
-};
-
-const initMarker = (className: string, markerName: string): Marker => {
-  return {
-    className,
-    markerName,
-  };
-};
-const initItem = (_name: string): Item => {
-  return {
-    name: _name,
-    showSelectBox: false,
-    marker: initMarker("", ""),
-  };
-};
-const items = ref<Array<Item>>([
-  initItem("Java"),
-  initItem("Perl"),
-  initItem("PHP"),
-]);
-
-const markers = ref<Array<Marker>>([
-  initMarker("ri-building-4-line", "仕事で使う"),
-  initMarker("ri-heart-line", "学ぶもの"),
-  initMarker("ri-pause-circle-fill", "今はやらない"),
-]);
+defineProps<{
+  items: Item[];
+}>();
 
 const submit = (e) => {
   if (e.target.value === "") {
     return;
   }
-  items.value.push({
-    name: e.target.value,
-    showSelectBox: false,
-    marker: {
-      className: "",
-      markerName: "",
-    },
-  });
   e.target.value = "";
 };
 
-const deleteEvent = (targetIndex: number): void => {
-  items.value = items.value.filter((v, index) => {
-    return index !== targetIndex;
-  });
-};
+const deleteEvent = (targetIndex: number): void => {};
 
-const changeMarker = (e: Event, itemIndex: number): void => {
-  const target = e.target as HTMLInputElement;
-  items.value[itemIndex].marker.className = target.value;
-  items.value[itemIndex].showSelectBox = false;
-};
+const changeMarker = (e: Event, itemIndex: number): void => {};
 
-const showSelectBox = (index: number): void => {
-  items.value[index].showSelectBox = true;
-};
+const showSelectBox = (index: number): void => {};
 </script>
 
 <template>

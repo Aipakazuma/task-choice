@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import LeafNodeWrapper from "@/components/LeafNodeWrapper.vue";
+import { Item } from "@/store/node/";
 defineProps<{
   name: string;
+  items: Item[];
 }>();
 </script>
 
 <template>
   <div class="inner-node">
     <span>{{ name }}</span>
-    <leaf-node-wrapper />
+    <leaf-node-wrapper :items="items" />
   </div>
 </template>
 
