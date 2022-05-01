@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, toRefs } from "vue";
 import LeafNode from "@/components/LeafNode.vue";
 
-type Item = {
+const props = defineProps<{
   name: string;
-  showSelectBox: boolean;
-  marker: Marker;
-};
+  items: Item[];
+}>();
 
-type Marker = {
-  className: string;
-  markerName: string;
-};
+const {name, items} = toRefs(props);
 
 const initMarker = (className: string, markerName: string): Marker => {
   return {
@@ -19,6 +15,7 @@ const initMarker = (className: string, markerName: string): Marker => {
     markerName,
   };
 };
+
 const initItem = (_name: string): Item => {
   return {
     name: _name,
@@ -26,11 +23,10 @@ const initItem = (_name: string): Item => {
     marker: initMarker("", ""),
   };
 };
-const items = ref<Array<Item>>([
-  initItem("Java"),
-  initItem("Perl"),
-  initItem("PHP"),
-]);
+
+items.value.push(initItem("Java"));
+items.value.push(initItem("Perl"));
+items.value.push(initItem("PHP"));
 
 const markers = ref<Array<Marker>>([
   initMarker("ri-building-4-line", "仕事で使う"),
@@ -53,10 +49,9 @@ const submit = (e) => {
   e.target.value = "";
 };
 
+const emit = defineEmits(["deleteEvent"]);
 const deleteEvent = (targetIndex: number): void => {
-  items.value = items.value.filter((v, index) => {
-    return index !== targetIndex;
-  });
+  emit("deleteEvent", name.value, targetIndex);
 };
 
 const changeMarker = (e: Event, itemIndex: number): void => {

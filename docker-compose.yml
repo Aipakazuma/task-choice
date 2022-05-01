@@ -7,11 +7,11 @@ services:
     environment:
       HOST: 0.0.0.0
       PORT: 80
-      WS_PORT: 81
+      WS_PORT: 83
       BASE_URL: http://localhost
     ports:
       - 82:80
-      - 83:81
+      - 83:83
     env_file:
       - .env
-    command: bash -c 'cd ./task-choice/ && npm run dev -- --host 0.0.0.0 --port 80'
+    command: bash -c 'cd ./task-choice/ && npm install && npm run dev -- --host 0.0.0.0 --port 80'

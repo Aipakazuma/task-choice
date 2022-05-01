@@ -2,13 +2,19 @@
 import LeafNodeWrapper from "@/components/LeafNodeWrapper.vue";
 defineProps<{
   name: string;
+  items: Item[];
 }>();
+
+const emit = defineEmits(["deleteEvent"]);
+const deleteEvent = (name: string, targetIndex: number): void => {
+  emit("deleteEvent", name, targetIndex);
+};
 </script>
 
 <template>
   <div class="inner-node">
     <span>{{ name }}</span>
-    <leaf-node-wrapper />
+    <leaf-node-wrapper @deleteEvent="deleteEvent" :name="name" :items="items"/>
   </div>
 </template>
 
