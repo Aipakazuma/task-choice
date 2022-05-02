@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref, toRefs } from "vue";
+import { toRefs } from "vue";
 import LeafNode from "@/components/LeafNode.vue";
 import { inject } from "vue";
-import { nodeKey } from "@/stores/nodee";
+import { nodeKey } from "@/stores/main-nodes";
+import type {
+  Item,
+  Marker,
+  MarkerClassName,
+  NodeName,
+} from "@/stores/main-nodes/types";
 
 const props = defineProps<{
-  name: NodeeName;
+  name: NodeName;
   items: Item[];
 }>();
 
@@ -25,6 +31,9 @@ const markers: Marker[] = [
 ];
 
 const nodeStore = inject(nodeKey);
+if (!nodeStore) {
+  throw new Error("nodeStore is not provided.");
+}
 const { name } = toRefs(props);
 
 const submit = (e: Event) => {
@@ -32,7 +41,7 @@ const submit = (e: Event) => {
   if (target.value === "") {
     return;
   }
-  nodeStore.addItem(name.value, target.value);
+  nodeStore.addItem(name.value as NodeName, target.value);
   target.value = "";
 };
 
@@ -42,7 +51,7 @@ const deleteEvent = (targetId: string): void => {
 
 const changeMarker = (e: Event, targetId: string): void => {
   const target = e.target as HTMLInputElement;
-  nodeStore.updateItem(name.value, targetId, target.value);
+  nodeStore.updateItem(name.value, targetId, target.value as MarkerClassName);
 };
 
 const showSelectBox = (targetId: string): void => {

@@ -1,7 +1,17 @@
+import type { InjectionKey } from "vue";
 import { reactive, readonly } from "vue";
+import type {
+  Item,
+  Marker,
+  MarkerClassName,
+  Node,
+  NodeName,
+  NodeState,
+  NodeStore,
+} from "@/stores/main-nodes/types";
 import UUID from "uuidjs";
 
-const mockNodes: Nodee[] = [
+const mockNodes: Node[] = [
   {
     name: "基礎",
     items: [],
@@ -20,7 +30,7 @@ const initializeMarker = (className: string, markerName: string): Marker => {
   return {
     className,
     markerName,
-  };
+  } as Marker;
 };
 
 const initializeItem = (name: string) => {
@@ -41,7 +51,7 @@ for (let i = 0; i < 3; i++) {
   mockNodes[i].items.push(initializeItem("PHP"));
 }
 
-const state = reactive<NodeeState>({
+const state = reactive<NodeState>({
   nodes: mockNodes,
 });
 
@@ -53,7 +63,7 @@ const getItems = (nodeName: string) => {
   return node.items;
 };
 
-const getItemsIndex: number = (nodeName: NodeeName) => {
+const getItemsIndex = (nodeName: NodeName): number => {
   const index = state.nodes.findIndex((node) => node.name === nodeName);
   if (index < 0) {
     throw new Error(`cannot find node by nodeName:${nodeName}`);
@@ -61,12 +71,16 @@ const getItemsIndex: number = (nodeName: NodeeName) => {
   return index;
 };
 
-const addItem = async (nodeName: string, itemName: Item) => {
+const addItem = async (nodeName: NodeName, itemName: string) => {
   const items = getItems(nodeName);
   items.push(initializeItem(itemName));
 };
 
-const updateItem = (nodeName: string, id: number, markerClassName: string) => {
+const updateItem = (
+  nodeName: string,
+  id: string,
+  markerClassName: MarkerClassName
+) => {
   const items = getItems(nodeName);
   const item = items.find((item) => item.id === id);
   if (!item) {
@@ -76,22 +90,25 @@ const updateItem = (nodeName: string, id: number, markerClassName: string) => {
   item.showSelectBox = false;
 };
 
-const showSelectBox = (nodeName: NodeeName, id: string): void => {
+const showSelectBox = (nodeName: NodeName, id: string): void => {
   console.log(nodeName, id);
   const items = getItems(nodeName);
   const item = items.find((item) => item.id === id);
+  if (!item) {
+    return;
+  }
   item.showSelectBox = true;
 };
 
-const deleteItem = (nodeName: string, id: number) => {
-  const index = getItemsIndex(nodeName);
+const deleteItem = (nodeName: NodeName, id: string) => {
+  const index: number = getItemsIndex(nodeName);
   console.log(index, state.nodes[index].items);
   state.nodes[index].items = state.nodes[index].items.filter(
     (item) => item.id !== id
   );
 };
 
-const nodeStore: NodeeStore = {
+const nodeStore: NodeStore = {
   state: readonly(state),
   getItems,
   addItem,
@@ -101,4 +118,4 @@ const nodeStore: NodeeStore = {
 };
 
 export default nodeStore;
-export const nodeKey: InjectionKey<NodeeStore> = Symbol("node");
+export const nodeKey: InjectionKey<NodeStore> = Symbol("node");

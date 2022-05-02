@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import LeafNodeWrapper from "@/components/LeafNodeWrapper.vue";
-import { Item } from "@/store/node/";
+import type { Item, NodeName } from "@/stores/main-nodes/types";
 defineProps<{
-  name: string;
+  name: NodeName;
   items: Item[];
 }>();
 </script>

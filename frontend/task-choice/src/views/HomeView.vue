@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import InnerNode from "../components/InnerNode.vue";
 import { inject } from "vue";
-import { nodeKey } from "@/stores/nodee";
+import { nodeKey } from "@/stores/main-nodes";
 
 const nodeStore = inject(nodeKey);
 </script>
