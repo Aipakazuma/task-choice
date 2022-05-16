@@ -34,3 +34,12 @@ root@5694494a012d:/app# npm install
 root@5694494a012d:/app# npm lint
 root@5694494a012d:/app# npm run dev -- --host 0.0.0.0 --port 80
 ```
+
+
+# typecheck
+
+`docker compose up` 後.
+
+```bash
+$ docker compose exec frontend /bin/bash -c "cd /app/task-choice && npm run typecheck -- -w"
+```

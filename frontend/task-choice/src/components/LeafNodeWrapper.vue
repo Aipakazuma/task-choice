@@ -1,72 +1,61 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { toRefs } from "vue";
 import LeafNode from "@/components/LeafNode.vue";
+import { inject } from "vue";
+import { nodeKey } from "@/stores/main-nodes";
+import type {
+  Item,
+  Marker,
+  MarkerClassName,
+  NodeName,
+} from "@/stores/main-nodes/types";
 
-type Item = {
-  name: string;
-  showSelectBox: boolean;
-  marker: Marker;
-};
+const props = defineProps<{
+  name: NodeName;
+  items: Item[];
+}>();
 
-type Marker = {
-  className: string;
-  markerName: string;
-};
+const markers: Marker[] = [
+  {
+    className: "ri-building-4-line",
+    markerName: "仕事で使う",
+  },
+  {
+    className: "ri-heart-line",
+    markerName: "学ぶもの",
+  },
+  {
+    className: "ri-pause-circle-fill",
+    markerName: "今はやらない",
+  },
+];
 
-const initMarker = (className: string, markerName: string): Marker => {
-  return {
-    className,
-    markerName,
-  };
-};
-const initItem = (_name: string): Item => {
-  return {
-    name: _name,
-    showSelectBox: false,
-    marker: initMarker("", ""),
-  };
-};
-const items = ref<Array<Item>>([
-  initItem("Java"),
-  initItem("Perl"),
-  initItem("PHP"),
-]);
+const nodeStore = inject(nodeKey);
+if (!nodeStore) {
+  throw new Error("nodeStore is not provided.");
+}
+const { name } = toRefs(props);
 
-const markers = ref<Array<Marker>>([
-  initMarker("ri-building-4-line", "仕事で使う"),
-  initMarker("ri-heart-line", "学ぶもの"),
-  initMarker("ri-pause-circle-fill", "今はやらない"),
-]);
-
-const submit = (e) => {
-  if (e.target.value === "") {
+const submit = (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (target.value === "") {
     return;
   }
-  items.value.push({
-    name: e.target.value,
-    showSelectBox: false,
-    marker: {
-      className: "",
-      markerName: "",
-    },
-  });
-  e.target.value = "";
+  nodeStore.addItem(name.value as NodeName, target.value);
+  target.value = "";
 };
 
-const deleteEvent = (targetIndex: number): void => {
-  items.value = items.value.filter((v, index) => {
-    return index !== targetIndex;
-  });
+const deleteEvent = (targetId: string): void => {
+  nodeStore.deleteItem(name.value, targetId);
 };
 
-const changeMarker = (e: Event, itemIndex: number): void => {
+const changeMarker = (e: Event, targetId: string): void => {
   const target = e.target as HTMLInputElement;
-  items.value[itemIndex].marker.className = target.value;
-  items.value[itemIndex].showSelectBox = false;
+  nodeStore.updateItem(name.value, targetId, target.value as MarkerClassName);
 };
 
-const showSelectBox = (index: number): void => {
-  items.value[index].showSelectBox = true;
+const showSelectBox = (targetId: string): void => {
+  nodeStore.showSelectBox(name.value, targetId);
 };
 </script>
 
@@ -74,16 +63,16 @@ const showSelectBox = (index: number): void => {
   <div>
     <input type="text" @keyup.enter="submit" placeholder="入力してください" />
     <ul>
-      <li v-for="(item, index) in items" :key="item">
+      <li v-for="item in items" :key="item.id">
         <leaf-node
           :name="item.name"
           :className="item.marker.className"
-          @click="showSelectBox(index)"
+          @click="showSelectBox(item.id)"
         />
-        <button @click="deleteEvent(index)" class="delete-button">×</button>
+        <button @click="deleteEvent(item.id)" class="delete-button">×</button>
         <select
           v-show="item.showSelectBox"
-          @change="changeMarker($event, index)"
+          @change="changeMarker($event, item.id)"
         >
           <option name="" disabled selected>選択してください</option>
           <option
