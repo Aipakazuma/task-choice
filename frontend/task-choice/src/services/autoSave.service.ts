@@ -2,7 +2,6 @@ import type { NodeStore } from "@/stores/main-nodes/types";
 
 export class AutoSaveService {
   constructor(private nodeStore: NodeStore) {
-    console.log(nodeStore.getNodes());
   }
 
   setTimer(ms: number = 1000) {
