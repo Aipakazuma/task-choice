@@ -1,18 +1,14 @@
-import { useNodes } from "@/stores/nodes";
+import type { NodeStore } from "@/stores/main-nodes/types";
 
 export class AutoSaveService {
-  private nodes;
-
-  constructor() {
-    this.nodes = useNodes();
+  constructor(private nodeStore: NodeStore) {
   }
 
   setTimer(ms: number = 1000) {
-    setInterval(this.autoSave, ms);
+    setInterval(this.autoSave.bind(this), ms);
   }
 
-  autoSave(items: Item[]) {
-    const nodes = useNodes();
-    console.log(nodes);
+  autoSave() {
+    localStorage.setItem("nodes", JSON.stringify(this.nodeStore.getNodes()));
   }
 }

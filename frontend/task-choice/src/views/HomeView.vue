@@ -2,8 +2,22 @@
 import InnerNode from "../components/InnerNode.vue";
 import { inject } from "vue";
 import { nodeKey } from "@/stores/main-nodes";
+import { AutoSaveService } from "@/services/autoSave.service";
 
 const nodeStore = inject(nodeKey);
+if (!nodeStore) {
+  throw new Error("nodeStore is not provided.");
+}
+nodeStore.setNodesFromLocalStorage();
+
+const autoSaveService = new AutoSaveService(nodeStore);
+autoSaveService.setTimer(1000 * 10) // 10秒ごとにLocalStorageに保存.
+const handlerSaveNodes = (e: KeyboardEvent) => {
+  if (e.ctrlKey && e.code === "KeyS") {
+    autoSaveService.autoSave();
+  }
+}
+window.addEventListener("keydown", handlerSaveNodes);
 </script>
 
 <template>

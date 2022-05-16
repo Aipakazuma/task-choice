@@ -45,15 +45,33 @@ const initializeItem = (name: string) => {
   } as Item;
 };
 
-for (let i = 0; i < 3; i++) {
-  mockNodes[i].items.push(initializeItem("Java"));
-  mockNodes[i].items.push(initializeItem("Perl"));
-  mockNodes[i].items.push(initializeItem("PHP"));
-}
+// for (let i = 0; i < 3; i++) {
+//   mockNodes[i].items.push(initializeItem("Java"));
+//   mockNodes[i].items.push(initializeItem("Perl"));
+//   mockNodes[i].items.push(initializeItem("PHP"));
+// }
 
 const state = reactive<NodeState>({
   nodes: mockNodes,
 });
+
+const getNodes = (): Node[] => {
+  return state.nodes;
+};
+
+const setNodesFromLocalStorage = (): void => {
+  const nodes = localStorage.getItem("nodes");
+  if (nodes === null) {
+    return;
+  }
+  if (nodes === "0") {
+    return;
+  }
+  if (nodes.length === 0) {
+    return;
+  }
+  state.nodes = JSON.parse(nodes); 
+}
 
 const getItems = (nodeName: string) => {
   const node = state.nodes.find((node) => node.name === nodeName);
@@ -91,7 +109,6 @@ const updateItem = (
 };
 
 const showSelectBox = (nodeName: NodeName, id: string): void => {
-  console.log(nodeName, id);
   const items = getItems(nodeName);
   const item = items.find((item) => item.id === id);
   if (!item) {
@@ -115,6 +132,8 @@ const nodeStore: NodeStore = {
   updateItem,
   showSelectBox,
   deleteItem,
+  getNodes,
+  setNodesFromLocalStorage
 };
 
 export default nodeStore;
