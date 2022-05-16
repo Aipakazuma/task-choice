@@ -41,4 +41,5 @@ export type NodeStore = {
   ) => void;
   showSelectBox(nodeName: NodeName, id: string): void;
   deleteItem: (nodeName: NodeName, id: string) => void;
+  getNodes: () => Node[]
 };

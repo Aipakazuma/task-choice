@@ -2,8 +2,14 @@
 import InnerNode from "../components/InnerNode.vue";
 import { inject } from "vue";
 import { nodeKey } from "@/stores/main-nodes";
+import { AutoSaveService } from "@/services/autoSave.service";
 
 const nodeStore = inject(nodeKey);
+if (!nodeStore) {
+  throw new Error("nodeStore is not provided.");
+}
+const autoSaveService = new AutoSaveService(nodeStore);
+autoSaveService.setTimer(1000 * 10) // 10秒ごとにLocalStorageに保存.
 </script>
 
 <template>
