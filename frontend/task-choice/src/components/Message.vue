@@ -10,9 +10,11 @@ const message = computed(() => messageStore.getMessage());
 </script>
 
 <template>
-  <div class="message" v-show="message">
-    {{ message }}
-  </div>
+  <transition name="fade">
+    <div class="message" v-show="message">
+      {{ message }}
+    </div>
+  </transition>
 </template>
 
 <style scoped>
@@ -29,5 +31,15 @@ const message = computed(() => messageStore.getMessage());
   line-height: 64px;
   background: #87fe64;
   border-radius: 10px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

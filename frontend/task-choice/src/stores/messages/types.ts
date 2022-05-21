@@ -7,5 +7,5 @@ export type MessageState = {
 export type MessageStore = {
     state: DeepReadonly<MessageState>;
     getMessage: () => string;
-    setMessage: (message: string, timeout: number) => void;
+    setMessage: (message: string, timeout?: number) => void;
 }
