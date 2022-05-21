@@ -14,3 +14,20 @@ const message = computed(() => messageStore.getMessage());
     {{ message }}
   </div>
 </template>
+
+<style scoped>
+.message {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  text-align: center;
+  z-index: 10;
+  border: 3px solid #a7ff00;
+  width: 360px;
+  margin: auto;
+  height: 64px;
+  line-height: 64px;
+  background: #87fe64;
+  border-radius: 10px;
+}
+</style>
