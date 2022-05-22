@@ -2,7 +2,8 @@
 
 取捨選択ツール
 
-Demo: https://task-choice.it-playground.link/
+* 参考記事: https://yoshikiito.net/blog/archives/1909/
+* Demo: https://task-choice.it-playground.link/
 
 # install
 
