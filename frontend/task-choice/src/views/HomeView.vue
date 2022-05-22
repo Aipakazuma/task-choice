@@ -5,6 +5,7 @@ import { nodeKey } from "@/stores/main-nodes";
 import { messageKey } from "@/stores/messages";
 import { AutoSaveService } from "@/services/autoSave.service";
 import Message from "../components/Message.vue";
+import Footer from "../components/Footer.vue";
 
 const nodeStore = inject(nodeKey);
 if (!nodeStore) {
@@ -40,6 +41,7 @@ window.addEventListener("keydown", handlerSaveNodes);
         :key="node.name"
       />
     </div>
+    <Footer />
   </main>
 </template>
 
