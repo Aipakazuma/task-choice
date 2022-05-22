@@ -102,34 +102,42 @@ ul {
   overflow: hidden;
   overflow-y: scroll;
   height: 500px;
-  border: 1px solid #000;
+  border: 1px solid #f0f0f0;
   margin-top: 10px;
+  background: #f0f0f0;
 }
 
 li {
   display: block;
-  border: 1px solid #000;
+  border: 1px solid #f0f0f0;
   padding: 5px;
   margin: 10px 10px;
   overflow-wrap: break-word;
   position: relative;
   cursor: pointer;
+  background: #fff;
 }
 
 li:hover {
-  background: #eee;
+  background: #4d4e3f;
+  color: #fff;
 }
 
 .delete-button {
   position: absolute;
   top: -10px;
   right: -10px;
-  background: #fff;
+  background: #6aa512;
   border-radius: 50%;
-  border: 1px solid #000;
+  border: 1px solid #6aa512;
   font-size: 10px;
   width: 20px;
   height: 20px;
   cursor: pointer;
+  color: #fff;
+}
+
+input {
+  border: 1px solid #f0f0f0;
 }
 </style>
