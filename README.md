@@ -2,6 +2,8 @@
 
 取捨選択ツール
 
+Demo: https://task-choice.it-playground.link/
+
 # install
 
 ```bash
@@ -43,3 +45,13 @@ root@5694494a012d:/app# npm run dev -- --host 0.0.0.0 --port 80
 ```bash
 $ docker compose exec frontend /bin/bash -c "cd /app/task-choice && npm run typecheck -- -w"
 ```
+
+# deploy
+
+いつか自動化したい
+
+```
+$ docker compose exec frontend /bin/bash -c "cd /app/task-choice && npm run build"
+```
+
+`~/frontend/task-choice/dist` ディレクトリが作成されるので、生成されたディレクトリ以下をサーバへアップロードする.
