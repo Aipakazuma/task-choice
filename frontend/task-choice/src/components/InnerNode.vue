@@ -21,8 +21,10 @@ defineProps<{
 
 .inner-node > span {
   display: block;
-  border: 1px solid #000;
+  border: 1px solid #6aa512;
   padding: 5px 10px;
   text-align: center;
+  background: #6aa512;
+  color: #fff;
 }
 </style>

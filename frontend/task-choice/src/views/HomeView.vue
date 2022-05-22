@@ -47,11 +47,17 @@ window.addEventListener("keydown", handlerSaveNodes);
 <style scoped>
 h1 {
   text-align: center;
+  background: #6095e6;
+  color: #fff;
+  padding: 0.67em 0;
+  margin: 0;
 }
+
 .nodes {
   display: flex;
   justify-content: space-around;
   width: 700px;
   margin: auto;
+  padding-top: 20px;
 }
 </style>
